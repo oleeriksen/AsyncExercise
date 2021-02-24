@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AsyncExercise
 {
-    public class Client
+    public class Client : ICallback
     {
         private readonly Server mServer;
 
@@ -21,13 +21,14 @@ namespace AsyncExercise
 
                 if (number == 0) break;
 
-                int[] numbers = mServer.GetNumbers(number, 1, 6);
-
-                WriteToFile(numbers);
-
-                
+                mServer.GetNumbers(number, 1, 6, this);                
                 
             }
+        }
+
+        public void WhenResultReceived(int[] result)
+        {
+            WriteToFile(result);
         }
 
         private int GetNumber(String text)

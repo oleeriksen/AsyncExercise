@@ -7,8 +7,13 @@ namespace AsyncExercise
     {
 
         /* Return [amount] random numbers between [min] and [max] inclusive */
-        public int[] GetNumbers(int amount, int min, int max)
+        public void GetNumbers(int amount, int min, int max, ICallback cb)
         {
+            var t = new Thread(() => DoTheRealStuff(amount, min, max, cb) );
+            t.Start();
+        }
+
+        private void DoTheRealStuff(int amount, int min, int max, ICallback cb) {
             Thread.Sleep(10000);
             int[] res = new int[amount];
             Random r = new Random();
@@ -18,7 +23,10 @@ namespace AsyncExercise
                 int x = r.Next(max - min + 1) + min;
                 res[count++] = x;
             }
-            return res;
+            cb.WhenResultReceived(res);
         }
+
+
+
     }
 }
