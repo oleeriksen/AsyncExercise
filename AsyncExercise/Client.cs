@@ -24,9 +24,6 @@ namespace AsyncExercise
                 int[] numbers = mServer.GetNumbers(number, 1, 6);
 
                 WriteToFile(numbers);
-
-                
-                
             }
         }
 
