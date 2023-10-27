@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AsyncExercise
 {
@@ -8,23 +10,34 @@ namespace AsyncExercise
     {
         private readonly Server mServer;
 
-        public Client(Server server)
-        {
+        public Client(Server server){
             mServer = server;
-        }
+        }       
 
-        public void run()
-        {
+        public void run() {
+            List<Task> mTasks = new();
+
             while (true)
             {
                 int number = GetNumber("Enter a number (0 for stop): ");
 
                 if (number == 0) break;
 
-                int[] numbers = mServer.GetNumbers(number, 1, 6);
+                Task t = new Task(() =>
+                                    WriteToFile(mServer.GetNumbers(number, 1, 6)));
 
-                WriteToFile(numbers);
+                t.Start();
+
+                mTasks.Add(t);
             }
+            // vent på at alt er færdigt
+            foreach (var t in mTasks)
+                t.Wait();
+
+            //fortæl brugeren vi er færdige
+            Console.WriteLine("Done...");
+            Console.ReadKey();
+
         }
 
         private int GetNumber(String text)
