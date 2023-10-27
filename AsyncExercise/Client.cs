@@ -46,6 +46,11 @@ namespace AsyncExercise
             return int.Parse(Console.ReadLine());
         }
 
+        private async void WriteToFileAsync(int[] numbers) {
+            var t = new Task(() => WriteToFile(numbers));
+            await t;
+        }
+
         private void WriteToFile(int[] numbers)
         {
             string path = @"fromclient.txt";
